@@ -1,9 +1,8 @@
 #coding=utf-8
 from django.conf import settings
 
-from zlib import crc32
-
 from netaddr import IPAddress, IPNetwork
+from zlib import crc32
 
 DEBUG_ENABLED = getattr(settings, 'DEBUG', True)
 
@@ -22,15 +21,15 @@ ip_name = [
     'server_128', 'server_129',
 ]
 
-def ipgeo(request):
-    address = get_ip(request)
-
-    for network, name in zip(ip_network, ip_name):
-        if address in network:
-            return name
-
 def get_ip(request):
     if DEBUG_ENABLED:
         return IPAddress(request.META['HTTP_X_REAL_IP'])
     else:
         return IPAddress(request.META['REMOTE_ADDR'])
+
+def get_geo(request):
+    ip_address = get_ip(request)
+
+    for network, name in zip(ip_network, ip_name):
+        if ip_address in network:
+            return name

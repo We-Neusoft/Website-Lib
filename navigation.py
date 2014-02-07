@@ -3,10 +3,10 @@ from django.core.cache import cache
 from django.core.urlresolvers import resolve, reverse
 
 from common.models import NavbarItem
-from libs.ip import ipgeo
+from libs.ip import get_geo
 
 def get_navbar(request):
-    if ipgeo(request):
+    if get_geo(request):
         items = cache.get('navbar_items__intranet')
         if not items:
             items = NavbarItem.objects.filter(intranet=True).order_by('order')
@@ -38,7 +38,7 @@ def get_name(request):
         except:
             return request.user.username
     else:
-        address = ipgeo(request)
+        address = get_geo(request)
         if not address:
             return '访客'
         elif address in ['faculty', 'administration']:
