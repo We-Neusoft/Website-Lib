@@ -25,6 +25,7 @@ def get_navbar(request):
     result.update({'navbar_items': navbar_items})
     result.update({'active_item': resolve(request.path).namespace})
     result.update({'html5': 'Mozilla/5.0' in request.META.get('HTTP_USER_AGENT')})
+    result.update({'intranet': get_geo(request) is not None})
 
     return result
 
