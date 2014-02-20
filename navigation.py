@@ -2,8 +2,9 @@
 from django.core.cache import cache
 from django.core.urlresolvers import resolve, reverse
 
+from environment import get_environment
+from ip import get_geo
 from common.models import NavbarItem
-from libs.ip import get_geo
 
 def get_navbar(request):
     if get_geo(request):
@@ -21,11 +22,9 @@ def get_navbar(request):
     for item in items:
         navbar_items.append({'key': item.key, 'title': item.title, 'url': reverse(item.key + ':index')})
 
-    result = dict()
+    result = get_environment(request)
     result.update({'navbar_items': navbar_items})
     result.update({'active_item': resolve(request.path).namespace})
-    result.update({'html5': 'Mozilla/5.0' in request.META.get('HTTP_USER_AGENT')})
-    result.update({'intranet': get_geo(request) is not None})
 
     return result
 
