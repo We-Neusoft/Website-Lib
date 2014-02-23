@@ -44,7 +44,7 @@ def get_token(request, redirect_uri, code):
     try:
         token = loads(urllib2.urlopen(auth_request).read())
         request.session.clear()
-        request.session.set_expiry(token['expires_in'])
+        request.session.set_expiry(None)
         request.session.update({'type': token['token_type'], 'token': token['access_token']})
 
         return True
