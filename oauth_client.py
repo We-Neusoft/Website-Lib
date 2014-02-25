@@ -8,8 +8,10 @@ from json import loads
 
 from oauth_forms import TokenForm
 
-CLIENT_ID = getattr(settings, 'OAUTH_CLIENT_ID')
-CLIENT_SECRET = getattr(settings, 'OAUTH_CLIENT_SECRET')
+CLIENT_ID = getattr(settings, 'OPEN_CLIENT_ID')
+CLIENT_SECRET = getattr(settings, 'OPEN_CLIENT_SECRET')
+OPEN_AUTHORIZE_URL = getattr(settings, 'OPEN_SERVER_AUTHORIZE')
+OPEN_TOKEN_URL = getattr(settings, 'OPEN_SERVER_TOKEN')
 
 def login(request, redirect_uri):
     form = TokenForm(request.session)
@@ -24,7 +26,7 @@ def login(request, redirect_uri):
             'state': 'wecloud',
         }
 
-        return HttpResponseRedirect(reverse('api:oauth:authorize') + '?%s' % urlencode(params))
+        return HttpResponseRedirect(OPEN_AUTHORIZE_URL + '?%s' % urlencode(params))
 
 def get_token(request, redirect_uri, code):
     params = {
@@ -32,7 +34,7 @@ def get_token(request, redirect_uri, code):
         'code': code,
         'redirect_uri': redirect_uri,
     }
-    url = 'http://dev.we.neusoft.edu.cn' + reverse('api:oauth:token')
+    url = OPEN_TOKEN_URL
 
     basic_auth = urllib2.HTTPBasicAuthHandler()
     basic_auth.add_password(realm='Please provide your client_id and client_secret.', uri=url, user=CLIENT_ID, passwd=CLIENT_SECRET)
