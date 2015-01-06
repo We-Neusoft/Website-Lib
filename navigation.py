@@ -7,7 +7,7 @@ from ip import get_geo
 from common.models import NavbarItem
 
 def get_navbar(request):
-    if get_geo(request):
+    if get_geo(request)[0]:
         items = cache.get('navbar_items__intranet')
         if not items:
             items = NavbarItem.objects.filter(intranet=True).order_by('order')
@@ -38,7 +38,7 @@ def get_name(request):
         except:
             return request.user.username
     else:
-        address = get_geo(request)
+        address = get_geo(request)[0]
         if not address:
             return '访客'
         elif address in ['faculty', 'administration']:
