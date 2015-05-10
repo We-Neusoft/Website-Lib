@@ -6,8 +6,6 @@ from zlib import crc32
 
 from converter import link_speed
 
-DEBUG_ENABLED = getattr(settings, 'DEBUG', True)
-
 ip_network = [
     IPNetwork('127.0.0.1/32'),
     IPNetwork('172.18.0.0/16'), IPNetwork('172.19.0.0/17'), IPNetwork('172.21.0.0/17'), IPNetwork('172.21.128.0/17'),
@@ -31,10 +29,7 @@ ip_speed = [
 ]
 
 def get_ip(request):
-    if DEBUG_ENABLED:
-        return IPAddress(request.META['HTTP_X_REAL_IP'])
-    else:
-        return IPAddress(request.META['REMOTE_ADDR'])
+    return IPAddress(request.META['REMOTE_ADDR'])
 
 def get_geo(request):
     ip_address = get_ip(request)
